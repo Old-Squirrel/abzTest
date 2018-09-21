@@ -1,0 +1,48 @@
+.a-card-header{
+    color: white;
+    display: block;
+    background-color: yellowgreen;
+    border-radius: 6px 6px 6px 6px ;
+    box-shadow:0 0 10px;
+    border-color: #1b1e21;
+}
+.a-card-header:hover{
+    color: #1d68a7;
+    background-color: #98e1b7;
+    text-decoration: none;
+    transition-delay: 20ms;
+}
+.a-card-header:active{
+    color: paleturquoise;
+    background-color: grey;
+    text-decoration: none;
+    transition-delay: 50ms;
+    box-shadow:0 0 10px inset
+}
+.container{
+    background-color: lightgrey;
+
+}
+.footer{
+    min-height: 8rem;
+}
+.card{
+    border-radius: 6px 6px 6px 6px ;
+}
+
+.hr-app{
+background-color: #1d643b;
+    margin-top: 2%;
+    margin-bottom: 1%;
+    margin-left: -15px;
+}
+.empty-image-div-edit{
+    width: auto;
+    height: 10rem;
+    background: lightblue;
+}
+.empty-image-div-index{
+    width: 8rem;
+    height: 6rem;
+    background: lightblue;
+}
