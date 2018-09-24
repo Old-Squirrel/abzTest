@@ -1,40 +1,36 @@
 @extends('layouts.app')
 @section('content')
 
-    <table class="table table-striped ">
-        <thead>
+    <table class="table">
+        <thead class="thead-dark">
         <th colspan="2" class="border border-dark text-center">Имя</th>
-        <th colspan="2" class="border border-dark text-center">Должность</th>
-        <th colspan="2" class="border border-dark text-center">Дата приёма на работу</th>
-        <th colspan="2" class="border border-dark text-center">Зароботная плата, $</th>
+        <th class="border border-dark text-center">Должность</th>
+        <th class="border border-dark text-center">Принят</th>
+        <th class="border border-dark text-center">ЗП, $</th>
+        <th colspan="2" class="border border-dark text-center">Начальник</th>
 
         </thead>
         <tbody>
         @foreach($employees as $employee)
 
-                @if($employee->subordinates->count()>0)
-                    <td class="text-left" colspan="2">
-                       {{$employee->name}}
-                    </td>
-                <td class="text-center" colspan="2">{{$employee->post}}</td>
-                <td class="text-center" colspan="2">{{$employee->date_of_employment}}</td>
-                <td class="text-center" colspan="2">{{$employee->wage}}</td>
-                    </tr>
+            @if($employee->subordinates->count()>0)
+                <tr>
+                    <td></td>
+               @include('partials.TableFromNameToChief',['$employees'=>$employee])
+                <td></td>
+                </tr>
 
-                        @include('partials.subordinates',['employees'=>$employee->subordinates])
+                @include('partials.subordinates',['employees'=>$employee->subordinates])
 
-                @else
-<tr class="">
-    <td class="text-left" colspan="2">
-        <p class="ml-5"> - {{$employee->name}}</p>
-    </td>
-                        <td class="text-center" colspan="2">{{$employee->post}}</td>
-                        <td class="text-center" colspan="2">{{$employee->date_of_employment}}</td>
-                        <td class="text-center" colspan="2">{{$employee->wage}}</td>
-                    </tr>
-                    @endif
+            @else
+                <tr>
+                <td></td>
+                @include('partials.TableFromNameToChief',['$employees'=>$employee])
+                <td></td>
+                </tr>
+            @endif
 
-                    @endforeach
+        @endforeach
         </tbody>
         <tfoot>
         <tr>
@@ -45,5 +41,5 @@
             </td>
         </tr>
         </tfoot>
- </table>
-      @endsection
+    </table>
+@endsection

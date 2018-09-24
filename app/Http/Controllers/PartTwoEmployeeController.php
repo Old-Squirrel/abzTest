@@ -21,17 +21,7 @@ class PartTwoEmployeeController extends Controller
         $sort = $request->input('sort', 'asc');
         $searchRequest = $request->input('searchRequest');
 
-
-        // являются ли данные из посика датой
-        if (strtotime($searchRequest) != Null):
-            $searchResult = Employee::where('date_of_employment', '=', $searchRequest);
-        else:
-            $searchResult = Employee::where('name', 'LIKE', "%$searchRequest%")
-                ->orWhere('post', 'LIKE', "%$searchRequest%")
-                ->orWhere('wage', 'LIKE', "%$searchRequest%")
-                ->orWhere('chief_id', 'LIKE', "%$searchRequest%");
-        endif;
-
+        $searchResult = $this->getSearchResult($request);
 
         $employees = $searchRequest != NULL
             ? $searchResult->with('subordinates')
@@ -61,6 +51,28 @@ class PartTwoEmployeeController extends Controller
 //                ->limit(100)
 //                ->get());
 //    }
+
+
+
+public function getSearchResult(Request $request){
+
+    $searchRequest = $request->input('searchRequest');
+
+
+    // являются ли данные из посика датой
+    if (strtotime($searchRequest) != Null):
+        $searchResult = Employee::where('date_of_employment', '=', $searchRequest);
+    else:
+        $searchResult = Employee::where('name', 'LIKE', "%$searchRequest%")
+            ->orWhere('post', 'LIKE', "%$searchRequest%")
+            ->orWhere('wage', 'LIKE', "%$searchRequest%")
+           ;
+    endif;
+
+
+     return $searchResult;
+}
+
 
 
     public function create()
@@ -119,6 +131,10 @@ class PartTwoEmployeeController extends Controller
 
     public function destroy(Employee $employee)
     {
+
+        if($employee->subordinates()->count()>0):
+            $employee->subordinates()->update(['chief_id' => 0 ]);
+        endif;
 
         if ($employee->photo != NULL):
             Storage::disk('public')->delete('/' . $employee->photo);

@@ -33,32 +33,38 @@
             </thead>
             <tbody>
             <tr>
-                <td  class="border border-dark"></td>
+                <td class="border border-dark"></td>
                 @foreach($fields as $field)
 
                     <td class="border border-dark text-center">
-                      <div class="btn-group" role="group">
-                        <form method="get">
-                            <button id="ascSubmit" class="btn btn-outline-dark" title="сортировать по возрастанию">/\</button>
-                            <input id="column" type="hidden" name="column" value="{{$field}}">
-                            <input id="asc" type="hidden" name="sort" value="asc">
-                        </form>
+                        <div class="btn-group" role="group">
+                            <form method="get">
+                                <button id="ascSubmit" class="btn btn-outline-dark" title="сортировать по возрастанию">
+                                    /\
+                                </button>
+                                <input id="column" type="hidden" name="column" value="{{$field}}">
+                                <input id="asc" type="hidden" name="sort" value="asc">
+                            </form>
 
-                        <form method="get" action="">
-                            <button id="descSubmit" class="btn btn-outline-dark" title="сортировать по убыванию">\/</button>
-                            <input id="column" type="hidden" name="column" value="{{$field}}">
-                            <input id="desc" type="hidden" name="sort" value="desc">
-                        </form>
-                      </div>
+                            <form method="get" action="">
+                                <button id="descSubmit" class="btn btn-outline-dark" title="сортировать по убыванию">
+                                    \/
+                                </button>
+                                <input id="column" type="hidden" name="column" value="{{$field}}">
+                                <input id="desc" type="hidden" name="sort" value="desc">
+                            </form>
+                        </div>
                     </td>
 
                 @endforeach
-                <td  class="border border-dark"></td>
+                <td class="border border-dark"></td>
             </tr>
 
             @foreach($employees as $employee)
-                <tr>
-                    <td  class="">
+
+                @if($employee->subordinates->count()>0)
+                    <tr class="">
+                        <td class="">
                             @isset($employee->photo)
                                 <img src="{{asset('/storage/'.$employee->photo)}}" width="120px" height="100px">
                             @else
@@ -66,34 +72,58 @@
                                     <div class="col-sm-12 text-center"> Фотография отсутствует</div>
                                 </div>
                             @endif
-                    </td>
-                    <td class="" >{{$employee->name}}</td>
-                    <td class="text-center" >{{$employee->post}}</td>
-                    <td class="text-center" >{{$employee->date_of_employment}}</td>
-                    <td class="text-center" >{{$employee->wage}}</td>
-                    <td >@if($employee->chief_id == 0)
-                            Без начальника
-                        @else
-                            id - {{$employee->chief_id}}
-                        @endif
-                    </td>
+                        </td>
+                        @include('partials.TableFromNameToChief',['employees'=>$employee])
 
-                    <td>
-                    <div class="btn-group" role="group">
-                        <a href="{{route('part.two.employee.edit', $employee)}}" class="btn btn-outline-primary"
-                           title="перейти к редактированию">Upd.</a>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="{{route('part.two.employee.edit', $employee)}}" class="btn btn-outline-primary"
+                                   title="перейти к редактированию">Upd.</a>
 
 
-                        <form onsubmit="if(confirm('Удалить?')){return true}else{return false}"
-                              action="{{route('part.two.employee.destroy',$employee)}}" method="post">
-                            <input type="hidden" name="_method" value="DELETE">
-                            {{csrf_field()}}
-                            <button type="submit" class="btn btn-dark" title="удалить">Del.</button>
-                        </form>
-                    </div>
-                    </td>
+                                <form onsubmit="if(confirm('Удалить?')){return true}else{return false}"
+                                      action="{{route('part.two.employee.destroy',$employee)}}" method="post">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    {{csrf_field()}}
+                                    <button type="submit" class="btn btn-dark" title="удалить">Del.</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
 
-                </tr>
+                    @include('partials.subordinates',['employees'=>$employee->subordinates])
+                @else
+
+                    <tr class="">
+                        <td class="">
+                            @isset($employee->photo)
+                                <img src="{{asset('/storage/'.$employee->photo)}}" width="120px" height="100px">
+                            @else
+                                <div class="empty-image-div-index border border-dark d-flex align-items-center ">
+                                    <div class="col-sm-12 text-center"> Фотография отсутствует</div>
+                                </div>
+                            @endif
+                        </td>
+
+                        @include('partials.TableFromNameToChief',['employees'=>$employee])
+
+
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="{{route('part.two.employee.edit', $employee)}}" class="btn btn-outline-primary"
+                                   title="перейти к редактированию">Upd.</a>
+
+
+                                <form onsubmit="if(confirm('Удалить?')){return true}else{return false}"
+                                      action="{{route('part.two.employee.destroy',$employee)}}" method="post">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    {{csrf_field()}}
+                                    <button type="submit" class="btn btn-dark" title="удалить">Del.</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                @endif
             @endforeach
 
             </tbody>

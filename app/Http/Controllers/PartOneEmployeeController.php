@@ -16,7 +16,7 @@ class PartOneEmployeeController extends Controller
         return view('part-one.index', [
             'employees' => Employee::where('chief_id',0)
                 ->orWhereNull('chief_id')
-                ->with('subordinates')->paginate(10)
+                ->paginate(10)
         ]);
     }
 
