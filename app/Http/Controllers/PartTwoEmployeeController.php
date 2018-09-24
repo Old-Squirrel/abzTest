@@ -63,7 +63,7 @@ public function getSearchResult(Request $request){
     if (strtotime($searchRequest) != Null):
         $searchResult = Employee::where('date_of_employment', '=', $searchRequest);
     else:
-        $searchResult = Employee::where('name', 'LIKE', "%$searchRequest%")
+        $searchResult = Employee::Where('name', 'LIKE', "%$searchRequest%")
             ->orWhere('post', 'LIKE', "%$searchRequest%")
             ->orWhere('wage', 'LIKE', "%$searchRequest%")
            ;
@@ -131,9 +131,9 @@ public function getSearchResult(Request $request){
 
     public function destroy(Employee $employee)
     {
-
+        
         if($employee->subordinates()->count()>0):
-            $employee->subordinates()->update(['chief_id' => 0 ]);
+            $employee->subordinates()->update(['chief_id' => $employee->chief_id]);
         endif;
 
         if ($employee->photo != NULL):
